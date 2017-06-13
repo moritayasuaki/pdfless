@@ -1,0 +1,17 @@
+#!/bin/bash -e
+tmp=$(mktemp)
+dir=$(dirname $tmp)
+pushd $dir
+cat > $tmp << EOT
+\documentclass{article}
+\usepackage[active,tightpage]{preview}
+\begin{document}
+\begin{preview}
+$@
+\end{preview}
+\end{document}
+EOT
+pdflatex -halt-on-error $tmp
+popd
+cp $dir/tmp.pdf out.pdf
+pdfless $dir/tmp.pdf
