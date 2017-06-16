@@ -103,32 +103,29 @@ public:
     page_renderer pr;
     aa_resize(m_aa);
     double base;
-    if (aa_imgwidth(m_aa) * m_cur->page_rect().height() <
-        aa_imgheight(m_aa) * m_cur->page_rect().width())
-      base = aa_imgwidth(m_aa) / m_cur->page_rect().width();
-    else
+    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() >
+        aa_imgheight(m_aa) / m_cur->page_rect().height())
       base = aa_imgheight(m_aa) / m_cur->page_rect().height();
-    m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72, -1,
-                           -1, -1, -1);
+    else
+      base = aa_imgwidth(m_aa) / m_cur->page_rect().width() / 2;
+    m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72);
   }
   void reinit(void) {
     using namespace poppler;
     page_renderer pr;
     m_scale = 1.0;
     double base;
-    if (aa_imgwidth(m_aa) * m_cur->page_rect().height() <
-        aa_imgheight(m_aa) * m_cur->page_rect().width()) {
-      base = aa_imgwidth(m_aa) / m_cur->page_rect().width();
-      m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72,
-                             -1, -1, -1, -1);
-      m_offx = aa_imgwidth(m_aa) / 2;
-      m_offy = m_img.height() / 2;
-    } else {
+    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() >
+        aa_imgheight(m_aa) / m_cur->page_rect().height()) {
       base = aa_imgheight(m_aa) / m_cur->page_rect().height();
-      m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72,
-                             -1, -1, -1, -1);
+      m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72);
       m_offx = m_img.width() / 2;
       m_offy = aa_imgheight(m_aa) / 2;
+    } else {
+      base = aa_imgwidth(m_aa) / m_cur->page_rect().width() / 2;
+      m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72);
+      m_offx = aa_imgwidth(m_aa) / 2;
+      m_offy = m_img.height() / 2;
     }
   }
   void normalize(void) {
@@ -223,7 +220,7 @@ int main(int argc, char **argv) {
   pdfless pl(argv[1]);
   while (1) {
     if (pl.render())
-        exit(1);
+      exit(1);
     pl.flush();
     switch (getchar()) {
     case 'j':
