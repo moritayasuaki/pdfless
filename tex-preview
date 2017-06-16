@@ -11,7 +11,7 @@ $@
 \end{preview}
 \end{document}
 EOT
+
 pdflatex -halt-on-error $tmp > /dev/null
 popd
-cp $dir/tmp.pdf out.pdf
 pdfless $dir/tmp.pdf

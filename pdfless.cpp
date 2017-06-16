@@ -103,7 +103,7 @@ public:
     page_renderer pr;
     aa_resize(m_aa);
     double base;
-    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() >
+    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() / 2 >
         aa_imgheight(m_aa) / m_cur->page_rect().height())
       base = aa_imgheight(m_aa) / m_cur->page_rect().height();
     else
@@ -115,7 +115,7 @@ public:
     page_renderer pr;
     m_scale = 1.0;
     double base;
-    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() >
+    if (aa_imgwidth(m_aa) / m_cur->page_rect().width() / 2 >
         aa_imgheight(m_aa) / m_cur->page_rect().height()) {
       base = aa_imgheight(m_aa) / m_cur->page_rect().height();
       m_img = pr.render_page(m_cur, m_scale * base * 144, m_scale * base * 72);
